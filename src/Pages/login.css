@@ -1,0 +1,176 @@
+.main {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    margin-top: 20px;
+    min-height: 100vh;
+}
+
+.box {
+    /* position: relative; */
+    width: 1450px;
+    height: 600px;
+    background: #1c1c1c;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+
+
+.right{
+    width: 30%;
+    inset: 2px;
+    background: #383838;
+    z-index: 10;
+    padding: 50px 40px ;
+    display: flex;
+    flex-direction: column;
+}
+
+.right h2{
+    color: #F9F1FF;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0.1em;
+}
+
+.inputBox {
+    position: relative;
+    width: 300px;
+    margin-top: 35px;
+}
+
+.inputBox input{
+    position: relative;
+    width: 100%;
+    padding: 20px 10px 10px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #23242a;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    z-index: 10;
+}
+
+.inputBox span{
+    position: absolute;
+    left: 0;
+    padding: 20px 0px 10px;
+    font-size: 1em;
+    color: white;
+    pointer-events: none;
+    letter-spacing: 0.05em;
+    transition: 0.5s;
+}
+
+
+.inputBox input:valid ~ span, .inputBox input:focus ~ span{
+    color: white;
+    transform: translateX(0px) translateY(-34px);
+    font-size: 0.75em;
+}
+
+.inputBox i{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: #4949BC;
+    border-radius: 4px;
+    transition: 0.5s;
+    pointer-events: none;
+    z-index: 9;
+}
+
+.inputBox input:valid ~ i, .inputBox input:focus ~ i{
+    height: 44px;
+}
+
+.links {
+    display: flex;
+    justify-content: space-between;
+}
+
+.links a{
+    margin-right: 50px;
+}
+
+.links a:hover {
+    color: #ffd700;
+} 
+
+input[type="submit"]{
+    border: none;
+    outline: none;
+    background: #4949BC;
+    padding: 11px 25px;
+    width: 80%;
+    margin-top: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    color: white ;
+    align-self: center;
+}
+
+input[type="submit"]:active{
+    opacity: 0.8;
+}
+
+.left1{
+    background-image: url("./crypto.jpg");
+    background-size: 1015px 700px;
+    width: 70%;
+}
+
+.left{
+    width: 70%;
+    background-image: url("./crypto2.jpg");
+    background-size: 1015px;
+}
+
+.iframe{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%);
+}
+
+hr {
+    color: #F9F1FF;
+    width: 100px;
+}
+
+button {
+    border: none;
+    outline: none;
+    background: #4949BC;
+    padding: 11px 25px;
+    margin-top: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    color: white;
+    align-self: center;
+    width: 80%;
+}
+
+h5 {
+    align-self: center;
+}
+
+video {
+    position: absolute;
+    /* z-index: -1; */
+    top: 64px;
+    left: 0;
+    width: 100%;
+    object-fit: cover;
+}
