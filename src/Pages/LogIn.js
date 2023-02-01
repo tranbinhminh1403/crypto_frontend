@@ -18,7 +18,7 @@ function LogIn() {
 
 
         <div className="right">
-        <h2>Log In</h2>
+          <h2>Log In</h2>
             <div class="inputBox">
                 <input type="text" required="required"/>
                 <span>Username</span>

@@ -1,4 +1,4 @@
-import { LinearProgress, makeStyles, Typography } from "@material-ui/core";
+import { Button, LinearProgress, makeStyles, Typography } from "@material-ui/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -7,18 +7,69 @@ import CoinInfo from "../components/CoinInfo";
 import { SingleCoin } from "../config/api";
 import { numberWithCommas } from "../components/CoinsTable";
 import { CryptoState } from "../CryptoContext";
+import { FunctionsTwoTone } from "@mui/icons-material";
 
 const CoinPage = () => {
   const { id } = useParams();
   const [coin, setCoin] = useState();
 
-  const { currency, symbol } = CryptoState();
+  const { currency, symbol, setAlert, watchlist } = CryptoState();
 
   const fetchCoin = async () => {
     const { data } = await axios.get(SingleCoin(id));
 
     setCoin(data);
   };
+
+  function addToWatchlist() {
+    alert('Watchlist added');
+  }
+
+  // const addToWatchlist = async () => {
+  //   // const coinRef = doc(db, "watchlist", user.uid);
+  //   // try {
+  //   //   await setDoc(
+  //   //     coinRef,
+  //   //     { coins: watchlist ? [...watchlist, coin?.id] : [coin?.id] },
+  //   //     { merge: true }
+  //   //   );
+
+  //     setAlert({
+  //       open: true,
+  //       message: `${coin.name} Added to the Watchlist !`,
+  //       type: "success",
+  //     });
+  //   // } catch (error) {
+  //   //   setAlert({
+  //   //     open: true,
+  //   //     message: error.message,
+  //   //     type: "error",
+  //   //   });
+  //   // }
+  // };
+
+  // const removeFromWatchlist = async () => {
+  //   const coinRef = doc(db, "watchlist", user.uid);
+  //   try {
+  //     // await setDoc(
+  //     //   coinRef,
+  //     //   { coins: watchlist.filter((wish) => wish !== coin?.id) },
+  //     //   { merge: true }
+  //     // );
+
+  //     setAlert({
+  //       open: true,
+  //       message: `${coin.name} Removed from the Watchlist !`,
+  //       type: "success",
+  //     });
+  //   } catch (error) {
+  //     setAlert({
+  //       open: true,
+  //       message: error.message,
+  //       type: "error",
+  //     });
+  //   }
+  // };
 
   useEffect(() => {
     fetchCoin();
@@ -89,7 +140,7 @@ const CoinPage = () => {
           height="200"
           style={{ marginBottom: 20 }}
         />
-        <Typography variant="h3" className={classes.heading}>
+        <Typography variant="h3" className={classes.heading} >
           {coin?.name}
         </Typography>
         <Typography variant="subtitle1" className={classes.description}>
@@ -105,6 +156,7 @@ const CoinPage = () => {
               variant="h5"
               style={{
                 fontFamily: "Montserrat",
+                marginBottom: 20,
               }}
             >
               {numberWithCommas(coin?.market_cap_rank)}
@@ -120,6 +172,7 @@ const CoinPage = () => {
               variant="h5"
               style={{
                 fontFamily: "Montserrat",
+                marginBottom: 20,
               }}
             >
               {symbol}{" "}
@@ -137,6 +190,7 @@ const CoinPage = () => {
               variant="h5"
               style={{
                 fontFamily: "Montserrat",
+                marginBottom: 20,
               }}
             >
               {symbol}{" "}
@@ -148,6 +202,18 @@ const CoinPage = () => {
               M
             </Typography>
           </span>
+          <Button
+              variant="outlined"
+              style={{
+                width: "100%",
+                height: 40,
+                // backgroundColor: inWatchlist ? "#ff0000" : "#EEBC1D",
+              }}
+              onClick={addToWatchlist}
+            >
+              {/* {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"} */}
+              Add to watchlist
+            </Button>
         </div>
       </div>
       <CoinInfo coin={coin} />
