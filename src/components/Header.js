@@ -13,6 +13,8 @@ import {
 } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { CryptoState } from "../CryptoContext";
+import AuthModal from "./Authentication/AuthModal";
+import UserSidebar from "./Authentication/UserSidebar";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -21,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Montserrat",
     fontWeight: "bold",
     cursor: "pointer",
+    color: "white",
   },
 }));
 
@@ -35,13 +38,13 @@ const darkTheme = createTheme({
 
 function Header() {
   const classes = useStyles();
-  const { currency, setCurrency } = CryptoState();
+  const { currency, setCurrency, user } = CryptoState();
 
   const history = useHistory();
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <AppBar color="black" position="static">
+      <AppBar style={{ background: '#4949BC' }} position="static">
         <Container>
           <Toolbar>
             <Typography
@@ -52,7 +55,7 @@ function Header() {
               RailsCrypto
             </Typography>
 
-            <Typography 
+            {/* <Typography 
               onClick={() => history.push(`/signup`)}
               variant="string"
               className={classes.title}
@@ -70,20 +73,32 @@ function Header() {
               // style={{color:"#00adb5"}}
             >
               Log In
-            </Typography>
+            </Typography> */}
 
             {/* <Button color="inherit">Login</Button> */}
             <Select
-              variant="outlined"
+              variant="standard"
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={currency}
-              style={{ width: 100, height: 40, marginLeft: 15,borderColor: 'yellow', }}
+              style={{ width: 100, height: 40, marginLeft: 15 }}
               onChange={(e) => setCurrency(e.target.value)}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 0,
+                colors: {
+                ...theme.colors,
+                  text: 'orangered',
+                  primary25: 'hotpink',
+                  primary: 'black',
+                },
+              })}
             >
               <MenuItem value={"USD"}>USD</MenuItem>
               <MenuItem value={"VND"}>VND</MenuItem>
             </Select>
+
+            {user? <UserSidebar/> :<AuthModal/>}
           </Toolbar>
         </Container>
       </AppBar>

@@ -18,7 +18,7 @@ const ChartLine = ({ coin }) => {
 
   const useStyles = makeStyles((theme) => ({
     container: {
-      width: "67%",
+      width: "55%",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -61,7 +61,8 @@ const ChartLine = ({ coin }) => {
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
-        {!historicData | flag===false ? (
+        {!historicData | flag===false ? 
+        (
           <CircularProgress width={1}
             style={{ color: "gold" }}
             size={0}
@@ -73,10 +74,10 @@ const ChartLine = ({ coin }) => {
               data={{
                 labels: historicData.map((coin) => {
                   let date = new Date(coin[0]);
-                  let time =
-                    date.getHours() > 12
-                      ? `${date.getHours() - 12}:${date.getMinutes()} PM`
-                      : `${date.getHours()}:${date.getMinutes()} AM`;
+                  let time = date.getDay()
+                    // date.getHours() > 12
+                    //   ? `${date.getHours() - 12}:${date.getMinutes()} PM`
+                    //   : `${date.getHours()}:${date.getMinutes()} AM`;
                   return days === 1 ? time : date.toLocaleDateString();
                 }),
 
@@ -109,31 +110,16 @@ const ChartLine = ({ coin }) => {
                   legend: {
                     display: false,
                   }
-                }
+                },
+                animation: {
+                  duration: 0,
+                },
+                responsive: true,
               }}
             />
-            {/* <div
-              style={{
-                display: "flex",
-                marginTop: 20,
-                justifyContent: "space-around",
-                width: "100%",
-              }}
-            >
-              {chartDays.map((day) => (
-                <SelectButton
-                  key={day.value}
-                  onClick={() => {setDays(day.value);
-                    setflag(false);
-                  }}
-                  selected={day.value === days}
-                >
-                  {day.label}
-                </SelectButton>
-              ))}
-            </div> */}
           </>
-        )}
+        )
+      }
       </div>
     </ThemeProvider>
   );

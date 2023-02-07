@@ -8,6 +8,7 @@ import SignUp from "./Pages/SignUp";
 import LogIn from "./Pages/LogIn";
 import Footer from "./components/Footer/Footer";
 import ResponsiveAppBar from "./components/header1";
+import Alert from "./components/Alert";
 
 const useStyles = makeStyles(() => ({
   App: {
@@ -23,13 +24,14 @@ function App() {
   return (
     <BrowserRouter>
       <div className={classes.App}>
-        <ResponsiveAppBar/>
+        {/* <ResponsiveAppBar/> */}
+        <Header/>
         <Route path="/" component={Homepage} exact />
         <Route path="/coins/:id" component={CoinPage} exact />
-        <Route path="/signup" component={SignUp} exact />
-        <Route path="/login" component={LogIn} exact />
-        
+        {/* <Route path="/signup" component={SignUp} exact />
+        <Route path="/login" component={LogIn} exact /> */}
       </div>
+      <Alert/>
       {/* <Footer /> */}
     </BrowserRouter>
   );
