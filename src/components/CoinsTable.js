@@ -21,8 +21,15 @@ import { CoinList } from "../config/api";
 import { useHistory } from "react-router-dom";
 import { CryptoState } from "../CryptoContext";
 import ChartLine from "./tableChart";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-
+import { SingleCoin } from "../config/api";
+import { useParams } from "react-router-dom";
+import Footer from "./Footer/Footer";
+import { Sparklines, SparklinesLine} from 'react-sparklines';
+import ReactLoading from "react-loading";
+import Chart from "./chart";
 
 export function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -33,8 +40,9 @@ export default function CoinsTable() {
   // const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const { id } = useParams();
 
-  const { currency, symbol, coins, loading, fetchCoins } = CryptoState();
+  const { currency, symbol, coins, fetchCoins, user, setAlert, watchlist } = CryptoState();
 
   const useStyles = makeStyles({
     row: {
@@ -86,6 +94,87 @@ export default function CoinsTable() {
         coin.symbol.toLowerCase().includes(search)
     );
   };
+  const [coin, setCoin] = useState();
+
+  const fetchCoin = async () => {
+    const { data } = await axios.get(SingleCoin(id));
+
+    setCoin(data);
+  };
+
+
+  const inWatchlist = watchlist.includes(coin?.id);
+
+  const addToWatchlist = async () => {
+    const coinRef = doc(db, "watchlist", user.uid);
+    try {
+      await setDoc(
+        coinRef,
+        { coins: watchlist ? [...watchlist, coin?.id] : [coin?.id] },
+        { merge: true }
+      );
+
+      setAlert({
+        open: true,
+        message: `${coin.name} Added to the Watchlist !`,
+        type: "success",
+      });
+    } catch (error) {
+      setAlert({
+        open: true,
+        message: error.message,
+        type: "error",
+      });
+    }
+  };
+
+  const removeFromWatchlist = async () => {
+    const coinRef = doc(db, "watchlist", user.uid);
+    try {
+      await setDoc(
+        coinRef,
+        { coins: watchlist.filter((wish) => wish !== coin?.id) },
+        { merge: true }
+      );
+
+      setAlert({
+        open: true,
+        message: `${coin.name} Removed from the Watchlist !`,
+        type: "success",
+      });
+    } catch (error) {
+      setAlert({
+        open: true,
+        message: error.message,
+        type: "error",
+      });
+    }
+  };
+
+  const [data, setData] = useState([])
+  const params = useParams()
+  const [loading, setLoading] = useState(false)
+
+  const url = `https://api.coingecko.com/api/v3/coins/${params.coinId}?localization=false&sparkline=true`;
+
+  const coinData = async () => {
+    try{
+        await axios.get(url)
+            .then((response)=>{
+                setData(response.data)
+            })
+            setLoading(true)      
+    }catch(error){
+        console.error(`ERROR:  ${error}`)
+    }
+}
+
+useEffect(()=>{
+    coinData()
+    setLoading(false)
+},[url])
+
+
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -104,7 +193,7 @@ export default function CoinsTable() {
         />
         <TableContainer component={Paper} align="center" >
           {loading ? (
-            <LinearProgress style={{ backgroundColor: "gold" }} />
+            <LinearProgress style={{ backgroundColor: "#4949BC" }} />
           ) : (
             <Table aria-label="simple table"  >
               <TableHead style={{ backgroundColor: "#E8E8E8"}}>
@@ -137,8 +226,8 @@ export default function CoinsTable() {
                         className={classes.row}
                         key={row.name}
                       >
-                        <TableCell>
-                          <StarBorderIcon/>
+                        <TableCell onClick={(e) => e.stopPropagation()}>
+                          <StarBorderIcon onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}/>
                         </TableCell>
 
                         <TableCell>
@@ -207,8 +296,9 @@ export default function CoinsTable() {
                           M
                         </TableCell>
 
-                        <TableCell align="center" style={{flex:1}} >
-                        <ChartLine coin={row} />
+                        <TableCell align="center" style={{width: 200, height: 100}} >
+                          <ChartLine coin={row} />
+                            {/* <Chart key={row.id} coin={row}/> */}
                         </TableCell>
                       </TableRow>
                     );
@@ -234,6 +324,7 @@ export default function CoinsTable() {
           }}
         />
       </Container>
+      <Footer/>
     </ThemeProvider>
   );
 }
