@@ -12,6 +12,7 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import PublishIcon from '@mui/icons-material/Publish';
 import LinkIcon from '@mui/icons-material/Link';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   container: {
@@ -116,6 +117,7 @@ const useStyles = makeStyles({
 
 export default function UserSidebar() {
   const classes = useStyles();
+  const history = useHistory();
   const [state, setState] = React.useState({
     right: false,
   });
@@ -243,7 +245,7 @@ export default function UserSidebar() {
                   {coins.map((coin) => {
                     if (watchlist.includes(coin.id))
                       return (
-                        <div className={classes.coin}>
+                        <div className={classes.coin} onClick={() => window.open(`/coins/${coin.id}`, "_blank")}>
                           <span>{coin.name}</span>
                           <span style={{ display: "flex", gap: 8 }}>
                             {symbol}{" "}
