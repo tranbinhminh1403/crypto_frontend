@@ -24,6 +24,7 @@ import ChartLine from "./tableChart";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
 import { SingleCoin } from "../config/api";
 import { useParams } from "react-router-dom";
 import Footer from "./Footer/Footer";
@@ -103,53 +104,7 @@ export default function CoinsTable() {
   };
 
 
-  const inWatchlist = watchlist.includes(coin?.id);
 
-  const addToWatchlist = async () => {
-    const coinRef = doc(db, "watchlist", user.uid);
-    try {
-      await setDoc(
-        coinRef,
-        { coins: watchlist ? [...watchlist, coin?.id] : [coin?.id] },
-        { merge: true }
-      );
-
-      setAlert({
-        open: true,
-        message: `${coin.name} Added to the Watchlist !`,
-        type: "success",
-      });
-    } catch (error) {
-      setAlert({
-        open: true,
-        message: error.message,
-        type: "error",
-      });
-    }
-  };
-
-  const removeFromWatchlist = async () => {
-    const coinRef = doc(db, "watchlist", user.uid);
-    try {
-      await setDoc(
-        coinRef,
-        { coins: watchlist.filter((wish) => wish !== coin?.id) },
-        { merge: true }
-      );
-
-      setAlert({
-        open: true,
-        message: `${coin.name} Removed from the Watchlist !`,
-        type: "success",
-      });
-    } catch (error) {
-      setAlert({
-        open: true,
-        message: error.message,
-        type: "error",
-      });
-    }
-  };
 
   const [data, setData] = useState([])
   const params = useParams()
@@ -219,6 +174,53 @@ useEffect(()=>{
                 {handleSearch()
                   .slice((page - 1) * 10, (page - 1) * 10 + 10)
                   .map((row) => {
+                    const inWatchlist = watchlist.includes(row?.id);
+
+                    const addToWatchlist = async () => {
+                      const coinRef = doc(db, "watchlist", user.uid);
+                      try {
+                        await setDoc(
+                          coinRef,
+                          { coins: watchlist ? [...watchlist, row?.id] : [row?.id] },
+                          { merge: true }
+                        );
+                  
+                        setAlert({
+                          open: true,
+                          message: `${row.name} Added to the Watchlist !`,
+                          type: "success",
+                        });
+                      } catch (error) {
+                        setAlert({
+                          open: true,
+                          message: error.message,
+                          type: "error",
+                        });
+                      }
+                    };
+                  
+                    const removeFromWatchlist = async () => {
+                      const coinRef = doc(db, "watchlist", user.uid);
+                      try {
+                        await setDoc(
+                          coinRef,
+                          { coins: watchlist.filter((wish) => wish !== row?.id) },
+                          { merge: true }
+                        );
+                  
+                        setAlert({
+                          open: true,
+                          message: `${row.name} Removed from the Watchlist !`,
+                          type: "success",
+                        });
+                      } catch (error) {
+                        setAlert({
+                          open: true,
+                          message: error.message,
+                          type: "error",
+                        });
+                      }
+                    };
                     const profit = row.price_change_percentage_24h > 0;
                     return (
                       <TableRow
@@ -226,8 +228,10 @@ useEffect(()=>{
                         className={classes.row}
                         key={row.name}
                       >
-                        <TableCell onClick={(e) => e.stopPropagation()}>
-                          <StarBorderIcon onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}/>
+                        <TableCell onClick={(e) => e.stopPropagation()} >
+                          {user && (<div onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}>
+                            {inWatchlist ?  <StarIcon style={{ color: '#4949BC' }}/> : <StarBorderIcon/>}
+                          </div>)}
                         </TableCell>
 
                         <TableCell>
