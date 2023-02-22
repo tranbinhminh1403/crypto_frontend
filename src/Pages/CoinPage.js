@@ -9,14 +9,14 @@ import { SingleCoin } from "../config/api";
 import { numberWithCommas } from "../components/CoinsTable";
 import { CryptoState } from "../CryptoContext";
 import { FunctionsTwoTone } from "@mui/icons-material";
-import { doc, setDoc, onSnapshot } from "firebase/firestore";
+import { doc, setDoc, onSnapshot, FieldValue, updateDoc, FieldPath, deleteField } from "firebase/firestore";
 import { db } from "../firebase";
 
 const CoinPage = () => {
   const { id } = useParams();
   const [coin, setCoin] = useState();
 
-  const { currency, symbol, user, setAlert, watchlist } = CryptoState();
+  const { currency, symbol, user, setAlert, watchlist, portfolio } = CryptoState();
 
   const fetchCoin = async () => {
     const { data } = await axios.get(SingleCoin(id));
@@ -146,10 +146,11 @@ const CoinPage = () => {
     setOpen(false);
   };
 
+  const inCities = portfolio?.[coin?.id];
 
   const addCities = async () => {
  // Reference to the cities collection
- const citiesRef = doc(db, "cities", user.uid);
+  const citiesRef = doc(db, "cities", user.uid);
     try {
       await setDoc(
         citiesRef,
@@ -171,6 +172,32 @@ const CoinPage = () => {
     }
     handleClose();
   };
+
+  const removeCities = async () => {
+    const citiesRef = doc(db, "cities", user.uid);
+    try {
+      await updateDoc(citiesRef, {
+        [coin.id]: deleteField(),
+      });
+  
+      setAlert({
+        open: true,
+        message: `${coin.id} is removed from the Portfolio!`,
+        type: "success",
+      });
+    } catch (error) {
+      setAlert({
+        open: true,
+        message: error.message,
+        type: "error",
+      });
+    }
+  };
+
+  const removeCitiesAndClose = () => {
+    removeCities();
+    handleClose();
+  }
 
   if (!coin) return <LinearProgress style={{ backgroundColor: "gold" }} />;
 
@@ -266,14 +293,14 @@ const CoinPage = () => {
                 style={{
                   width: "100%",
                   height: 40,
-                  backgroundColor: "#4949BC",
+                  backgroundColor: inCities ? "#0ecb81" : "#4949BC",
                 }}
                 // onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
                 onClick={handleOpen}
                 // onClick={addCities}
               >
                 {/* {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"} */}
-                Add to portfolio
+                {inCities ? "Edit this coin" : "Add to portfolio"}
               </Button>
               <Modal
                 open={open}
@@ -285,7 +312,7 @@ const CoinPage = () => {
                 <div style={{background:"white", width: 500, height: 300,borderRadius: 10,display: "flex",flexDirection: "column", gap: "20px", paddingTop: 20}}>
                   <TextField
                     variant="standard"
-                    type="number"
+                    type="text"
                     label="Enter the quantity"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
@@ -298,7 +325,7 @@ const CoinPage = () => {
 
                   <TextField
                     variant="standard"
-                    type="number"
+                    type="text"
                     label="Enter the price"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
@@ -319,6 +346,17 @@ const CoinPage = () => {
                     // onClick={handleOpen}
                     onClick={addCities}
                   > Add to portfolio</Button>
+                  {inCities ?                   <Button
+                    variant="outlined"
+                    style={{
+                      width: "80%",
+                      height: 40,
+                      backgroundColor: "red",
+                    }}
+                    // onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
+                    // onClick={handleOpen}
+                    onClick={removeCitiesAndClose}
+                  > Delete</Button> :<></>}
                 </div>
               </Modal>
           </div>
