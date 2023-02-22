@@ -198,6 +198,15 @@ export default function UserSidebar() {
     }
   }
 
+  const handlePortfolioClick = () => {
+    history.push('/portfolio');
+    toggleDrawer();
+  };
+  
+  const logoutChange = () => {
+    history.push('/');
+    logOut();
+  };
   return (
     <div>
       {["right"].map((anchor) => (
@@ -265,7 +274,15 @@ export default function UserSidebar() {
               <Button
                 variant="contained"
                 className={classes.logout}
-                onClick={logOut}
+                onClick={handlePortfolioClick}
+                onClose={handleClose}
+              >
+                Wallet
+              </Button>
+              <Button
+                variant="contained"
+                className={classes.logout}
+                onClick={logoutChange}
               >
                 Log Out
               </Button>

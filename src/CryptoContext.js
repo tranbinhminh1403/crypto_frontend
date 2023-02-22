@@ -8,8 +8,8 @@ import { doc, onSnapshot } from "firebase/firestore";
 const Crypto = createContext();
 
 const CryptoContext = ({ children }) => {
-  const [currency, setCurrency] = useState("VND");
-  const [symbol, setSymbol] = useState("Đ");
+  const [currency, setCurrency] = useState("USD");
+  const [symbol, setSymbol] = useState("$");
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
