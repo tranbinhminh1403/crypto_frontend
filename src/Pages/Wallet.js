@@ -25,8 +25,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { numberWithCommas } from "../components/CoinsTable";
 import ClearIcon from "@mui/icons-material/Clear";
 import EditOffIcon from "@mui/icons-material/EditOff";
+import { useHistory } from "react-router-dom";
 
 const Wallet = () => {
+  const history = useHistory();
   const { user, setAlert, portfolio, coins, symbol } = CryptoState();
   console.log(portfolio, coins);
   const useStyles = makeStyles({
@@ -42,6 +44,10 @@ const Wallet = () => {
       backgroundColor: "white",
       cursor: "pointer",
     },
+    tolist: {
+      cursor: "pointer",
+      color: "#4949BC",
+    }
   });
   const classes = useStyles();
   const total = Object.keys(portfolio).reduce((acc, fieldName) => {
@@ -81,6 +87,9 @@ const Wallet = () => {
       <div>
         <h1>Your Wallet</h1>
       </div>
+
+        <h4 className={classes.tolist} onClick={() => history.push(`/`)}>Add new coin from list</h4>
+
 
       <TableContainer
         component={Paper}
