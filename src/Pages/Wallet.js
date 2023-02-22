@@ -94,11 +94,11 @@ const Wallet = () => {
       <TableContainer
         component={Paper}
         align="center"
-        style={{ width: "1200px" }}
+        style={{ width: "80%" }}
       >
         <Table aria-label="simple table">
           <TableHead style={{ backgroundColor: "#E8E8E8" }}>
-            <TableRow style={{ width: "1800px" }}>
+            <TableRow >
               {[
                 "Coin",
                 "Quantity",
@@ -235,7 +235,7 @@ const Wallet = () => {
               </TableCell>
               <TableCell />
               <TableCell />
-              <TableCell>{total}</TableCell>
+              <TableCell style={{color: "#4949BC"}}>{total}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableBody>
