@@ -1,4 +1,5 @@
-import { Button, LinearProgress, makeStyles, Typography } from "@material-ui/core";
+import React from "react";
+import { Button, LinearProgress, makeStyles, Modal, TextField, Typography } from "@material-ui/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -8,7 +9,7 @@ import { SingleCoin } from "../config/api";
 import { numberWithCommas } from "../components/CoinsTable";
 import { CryptoState } from "../CryptoContext";
 import { FunctionsTwoTone } from "@mui/icons-material";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 
 const CoinPage = () => {
@@ -133,6 +134,44 @@ const CoinPage = () => {
 
   const classes = useStyles();
 
+  const [quantity, setQuantity] = useState();
+  const [price, setPrice] = useState();
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
+  const addCities = async () => {
+ // Reference to the cities collection
+ const citiesRef = doc(db, "cities", user.uid);
+    try {
+      await setDoc(
+        citiesRef,
+        { [coin.id]: [quantity, price] },
+        { merge: true }
+      );
+
+      setAlert({
+        open: true,
+        message: `${coin.name} is added to the Portfolio!`,
+        type: "success",
+      });
+    } catch (error) {
+      setAlert({
+        open: true,
+        message: error.message,
+        type: "error",
+      });
+    }
+    handleClose();
+  };
+
   if (!coin) return <LinearProgress style={{ backgroundColor: "gold" }} />;
 
   return (
@@ -223,17 +262,65 @@ const CoinPage = () => {
           <br/>
 
           <Button
-              variant="outlined"
-              style={{
-                width: "100%",
-                height: 40,
-                backgroundColor: "#4949BC",
-              }}
-              // onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
-            >
-              {/* {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"} */}
-              Add to portfolio
-          </Button>
+                variant="outlined"
+                style={{
+                  width: "100%",
+                  height: 40,
+                  backgroundColor: "#4949BC",
+                }}
+                // onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
+                onClick={handleOpen}
+                // onClick={addCities}
+              >
+                {/* {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"} */}
+                Add to portfolio
+              </Button>
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                style={{alignItems: "center", display: "flex", justifyContent: "center"}}
+              >
+                <div style={{background:"white", width: 500, height: 300,borderRadius: 10,display: "flex",flexDirection: "column", gap: "20px", paddingTop: 20}}>
+                  <TextField
+                    variant="standard"
+                    type="number"
+                    label="Enter the quantity"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                    style={{
+                      width: "80%",
+                      alignSelf: "center",
+                      color: "white",
+                    }}
+                  />
+
+                  <TextField
+                    variant="standard"
+                    type="number"
+                    label="Enter the price"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    style={{
+                      width: "80%",
+                      alignSelf: "center",
+                      color: "white",
+                    }}
+                  />
+                  <Button
+                    variant="outlined"
+                    style={{
+                      width: "80%",
+                      height: 40,
+                      backgroundColor: "#4949BC",
+                    }}
+                    // onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
+                    // onClick={handleOpen}
+                    onClick={addCities}
+                  > Add to portfolio</Button>
+                </div>
+              </Modal>
           </div>
             )}
             

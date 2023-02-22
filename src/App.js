@@ -9,6 +9,7 @@ import LogIn from "./Pages/LogIn";
 import Footer from "./components/Footer/Footer";
 import ResponsiveAppBar from "./components/header1";
 import Alert from "./components/Alert";
+import Wallet from "./Pages/Wallet";
 
 const useStyles = makeStyles(() => ({
   App: {
@@ -28,6 +29,7 @@ function App() {
         <Header/>
         <Route path="/" component={Homepage} exact />
         <Route path="/coins/:id" component={CoinPage} exact />
+        <Route path="/portfolio" component={Wallet} exact />
         {/* <Route path="/signup" component={SignUp} exact />
         <Route path="/login" component={LogIn} exact /> */}
       </div>
