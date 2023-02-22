@@ -38,6 +38,25 @@ const CryptoContext = ({ children }) => {
     }
   }, [user]);
 
+  const [portfolio, setPortfolio] = useState([])
+    useEffect(() => {
+        if (user) {
+          const coinRef = doc(db, "cities", user?.uid);
+          var portSnap = onSnapshot(coinRef, (coin) => {
+            if (coin.exists()) {
+              console.log(coin.data());
+              setPortfolio(coin.data());
+            } else {
+              console.log("Unavailable");
+            }
+          });
+    
+          return () => {
+            portSnap();
+          };
+        }
+      }, [user]);
+
   useEffect(() => {
     onAuthStateChanged(auth,user => {
       if(user)setUser (user);
@@ -63,7 +82,7 @@ const CryptoContext = ({ children }) => {
   }, [currency]);
 
   return (
-    <Crypto.Provider value={{ currency, setCurrency, symbol, coins, loading, fetchCoins, alert, setAlert, user, watchlist }}>
+    <Crypto.Provider value={{ currency, setCurrency, symbol, coins, loading, fetchCoins, alert, setAlert, user, watchlist, portfolio }}>
       {children}
     </Crypto.Provider>
   );

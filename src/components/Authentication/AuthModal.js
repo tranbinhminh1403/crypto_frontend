@@ -19,9 +19,10 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     justifyContent: 'center',
-    width: 1000,
+    width: 800,
     height: 500,
-    backgroundColor: theme.palette.background.paper,
+    // backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#555555",
     color: "white",
     borderRadius: 10,
     // backgroundImage: "url('./crypto.jpg')",
