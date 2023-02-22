@@ -90,12 +90,12 @@ function Header() {
                 ...theme.colors,
                   text: 'orangered',
                   primary25: 'hotpink',
-                  primary: 'black',
+                  primary: 'white',
                 },
               })}
             >
-              <MenuItem value={"USD"}>USD</MenuItem>
-              <MenuItem value={"VND"}>VND</MenuItem>
+              <MenuItem value={"USD"} style={{color: "white"}}>USD</MenuItem>
+              <MenuItem value={"VND"} style={{color: "white"}}>VND</MenuItem>
             </Select>
 
             {user? <UserSidebar/> :<AuthModal/>}

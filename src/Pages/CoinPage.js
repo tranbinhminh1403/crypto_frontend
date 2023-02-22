@@ -279,7 +279,8 @@ const CoinPage = () => {
               style={{
                 width: "100%",
                 height: 40,
-                backgroundColor: inWatchlist ? "#ffffff" : "#4949BC",
+                backgroundColor: inWatchlist ? "#ffffff" : "rgb(56, 97, 251)",
+                color: inWatchlist ? "rgb(56, 97, 251)" : "#ffffff" 
               }}
               onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
             >
@@ -293,7 +294,8 @@ const CoinPage = () => {
                 style={{
                   width: "100%",
                   height: 40,
-                  backgroundColor: inCities ? "#0ecb81" : "#4949BC",
+                  backgroundColor: inCities ? "#0ecb81" : "rgb(56, 97, 251)",
+                  color: 'white',
                 }}
                 // onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
                 onClick={handleOpen}
@@ -327,6 +329,9 @@ const CoinPage = () => {
                     variant="standard"
                     type="text"
                     label="Enter the price"
+                    placeholder={numberWithCommas(
+                      coin?.market_data.current_price[currency.toLowerCase()]
+                      )}
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                     style={{
@@ -335,13 +340,15 @@ const CoinPage = () => {
                       color: "white",
                     }}
                   />
+
                   <Button
                     variant="outlined"
                     style={{
                       width: "80%",
                       height: 40,
-                      backgroundColor: "#4949BC",
-                    }}
+                      backgroundColor: "rgb(56, 97, 251)",
+                      color: 'white',
+                      }}
                     // onClick={inWatchlist ? removeFromWatchlist : addToWatchlist}
                     // onClick={handleOpen}
                     onClick={addCities}

@@ -136,7 +136,7 @@ useEffect(()=>{
       <Container style={{ textAlign: "center"}}>
         <Typography
           variant="h4"
-          style={{ margin: 18, fontFamily: "Montserrat", width: "1200px", color: "black" }}
+          style={{ margin: 18, fontFamily: "Montserrat", color: "black" }}
         >
           Cryptocurrency Prices by Market Cap
         </Typography>

@@ -92,6 +92,7 @@ const Wallet = () => {
             <TableRow style={{ width: "1800px" }}>
               {[
                 "Coin",
+                "Current Price",
                 "Quantity",
                 "Price per coin",
                 "Total",
@@ -186,6 +187,8 @@ const Wallet = () => {
                       />{" "}
                       {coin.name}
                     </TableCell>
+                    <TableCell>{coin.current_price}</TableCell>
+
                     <TableCell>{portfolio[coin.id][0]}</TableCell>
                     <TableCell>{portfolio[coin.id][1]}</TableCell>
                     <TableCell>
@@ -224,6 +227,7 @@ const Wallet = () => {
               <TableCell style={{ fontWeight: "bold", fontSize: 20 }}>
                 Overall
               </TableCell>
+              <TableCell />
               <TableCell />
               <TableCell />
               <TableCell>{total}</TableCell>
